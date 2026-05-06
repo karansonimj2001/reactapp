@@ -25,7 +25,7 @@ function Login() {
           <div className="login-panel">
             <h1 className="section-label">Secure Login</h1>
             <p className="section-copy">
-              Enter your credentials to access the administrative dashboard.
+              Enter your credentials to access the secure admin portal.
             </p>
 
             <form className="login-form">
