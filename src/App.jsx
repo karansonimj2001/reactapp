@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react'
 import Login from './page/Login'
 import Dashboard from './page/Dashboard'
-
+import statictable from './page/statictable'
 function App() {
-  const [user, setUser] = useState(null)
+ 
+    const [user, setUser] = useState(null)
 
   useEffect(() => {
     const savedUser = localStorage.getItem('adminPortalUser')

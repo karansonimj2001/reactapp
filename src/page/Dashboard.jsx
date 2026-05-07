@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
 import AnalyticsOutlinedIcon from "@mui/icons-material/AnalyticsOutlined";
@@ -13,7 +13,7 @@ import CloudQueueOutlinedIcon from "@mui/icons-material/CloudQueueOutlined";
 import SupportOutlinedIcon from "@mui/icons-material/SupportOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-
+import axios from "axios";
 const navItems = [
   {
     id: "dashboard",
@@ -48,7 +48,26 @@ const navItems = [
 ];
 
 function Dashboard({ user, onLogout }) {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("https://jsonplaceholder.typicode.com/users");
+        setUsers(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
   return (
+    
+    
     <div className="admin-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">
@@ -185,38 +204,26 @@ function Dashboard({ user, onLogout }) {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>John Doe</td>
-                  <td>Updated system firewall config</td>
-                  <td>12:45 PM</td>
-                  <td>
-                    <span className="status-badge status-success">SUCCESS</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Sarah Miller</td>
-                  <td>Created new API endpoint</td>
-                  <td>11:30 AM</td>
-                  <td>
-                    <span className="status-badge status-success">SUCCESS</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Robert King</td>
-                  <td>Database backup failed</td>
-                  <td>09:15 AM</td>
-                  <td>
-                    <span className="status-badge status-failed">FAILED</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Anna Lee</td>
-                  <td>User role modification</td>
-                  <td>08:00 AM</td>
-                  <td>
-                    <span className="status-badge status-success">SUCCESS</span>
-                  </td>
-                </tr>
+                {loading ? (
+                  <tr>
+                    <td colSpan="4" style={{ textAlign: "center", padding: "20px" }}>
+                      Loading users...
+                    </td>
+                  </tr>
+                ) : (
+                  users.map((user, index) => (
+                    <tr key={user.id}>
+                      <td>{user.name}</td>
+                      <td>{user.company?.name || "No company"}</td>
+                      <td>{new Date(Date.now() - Math.random() * 10000000000).toLocaleTimeString()}</td>
+                      <td>
+                        <span className={`status-badge ${index % 3 === 0 ? "status-failed" : "status-success"}`}>
+                          {index % 3 === 0 ? "FAILED" : "SUCCESS"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </section>

@@ -397,6 +397,8 @@ padding-bottom: 50px;
 }
 
 .sidebar-help {
+    cursor: pointer;
+
     border-top: #00000042 solid 1px;
   padding-top: 20px;
   margin-top: 24px;
