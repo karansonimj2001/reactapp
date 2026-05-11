@@ -912,3 +912,33 @@ color:#1627e1;}
 .analytic-number--success {
   color: #00650d;
 }
+
+.pagination-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:16px;
+  padding:12px 8px 0;
+}
+
+.pagination-btn{
+  border:0;
+  background:#eef0fb;
+  color:#1a237e;
+  font-weight:700;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.pagination-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.pagination-info{
+  color:#7b7894;
+  font-weight:700;
+  font-size:13px;
+}
