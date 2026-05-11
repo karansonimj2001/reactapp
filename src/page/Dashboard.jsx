@@ -68,8 +68,7 @@ function Dashboard({ user, onLogout }) {
         const response = await axios.get("https://jsonplaceholder.typicode.com/users");
         setUsers(response.data);
       } catch (error) {
-        // Keep UI stable even if network fails
-        // eslint-disable-next-line no-console
+
         console.error("Error fetching users:", error);
         setUsers([]);
       } finally {
@@ -81,7 +80,6 @@ function Dashboard({ user, onLogout }) {
   }, []);
 
   useEffect(() => {
-    // reset pagination when switching tabs that affect the table
     setCurrentPage(1);
   }, [selectedNav]);
 
