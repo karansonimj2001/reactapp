@@ -657,6 +657,8 @@ padding-bottom: 50px;
 
 .analytics-card,
 .activity-card {
+    overflow-x: auto;
+
   background: #ffffff;
   border-radius: 10px;
   padding: 28px;
@@ -693,8 +695,15 @@ color:#1627e1;}
   cursor: pointer;
 }
 
-.activity-card table {
+.activity-card .table-scroll {
+  overflow-x: auto;
   width: 100%;
+}
+
+.activity-card .table-scroll table {
+  display: inline-table;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
 }
 
@@ -704,7 +713,9 @@ color:#1627e1;}
   text-align: left;
   font-size: 13px;
   color: #5c5a7a;
+  white-space: nowrap;
 }
+
 
 .activity-card th {
   text-transform: uppercase;
@@ -852,4 +863,52 @@ color:#1627e1;}
 
 .meta-links span {
   color: #c3bfe0;
+}
+
+/* ---------------- Dashboard inline-style replacements ---------------- */
+
+.progress-fill--75 {
+  width: 75%;
+}
+
+.activity-th {
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.activity-th--photo {
+  min-width: 60px;
+}
+
+.activity-th--cell {
+  min-width: 120px;
+}
+
+.activity-td {
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.activity-td--photo {
+  min-width: 60px;
+}
+
+.activity-td--cell {
+  min-width: 120px;
+}
+
+.activity-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.analytic-number--primary {
+  color: #1a237e;
+}
+
+.analytic-number--success {
+  color: #00650d;
 }

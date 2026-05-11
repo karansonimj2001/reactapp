@@ -48,8 +48,137 @@ const navItems = [
 ];
 
 function Dashboard({ user, onLogout }) {
+  const data = [
+    {
+      photo: "https://randomuser.me/api/portraits/men/1.jpg",
+      name: "Rahul Sharma",
+      display_name: "rahul_dev",
+      email: "rahul@example.com",
+      phone: "+91 9876543210",
+      entity: "Developer",
+      rating: 4.5,
+      created_at: "2026-05-01",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/women/2.jpg",
+      name: "Priya Verma",
+      display_name: "priya_ui",
+      email: "priya@example.com",
+      phone: "+91 9876543211",
+      entity: "Designer",
+      rating: 4.8,
+      created_at: "2026-05-02",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/men/3.jpg",
+      name: "Amit Kumar",
+      display_name: "amit_react",
+      email: "amit@example.com",
+      phone: "+91 9876543212",
+      entity: "Frontend",
+      rating: 4.2,
+      created_at: "2026-05-03",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/women/4.jpg",
+      name: "Sneha Patel",
+      display_name: "sneha_app",
+      email: "sneha@example.com",
+      phone: "+91 9876543213",
+      entity: "Mobile App",
+      rating: 4.9,
+      created_at: "2026-05-04",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/men/5.jpg",
+      name: "Vikas Singh",
+      display_name: "vikas_node",
+      email: "vikas@example.com",
+      phone: "+91 9876543214",
+      entity: "Backend",
+      rating: 4.1,
+      created_at: "2026-05-05",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/women/6.jpg",
+      name: "Neha Gupta",
+      display_name: "neha_admin",
+      email: "neha@example.com",
+      phone: "+91 9876543215",
+      entity: "Admin",
+      rating: 4.7,
+      created_at: "2026-05-06",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/men/7.jpg",
+      name: "Karan Mehta",
+      display_name: "karan_js",
+      email: "karan@example.com",
+      phone: "+91 9876543216",
+      entity: "React JS",
+      rating: 4.3,
+      created_at: "2026-05-07",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/women/8.jpg",
+      name: "Pooja Arora",
+      display_name: "pooja_native",
+      email: "pooja@example.com",
+      phone: "+91 9876543217",
+      entity: "React Native",
+      rating: 4.6,
+      created_at: "2026-05-08",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/men/9.jpg",
+      name: "Arjun Das",
+      display_name: "arjun_fullstack",
+      email: "arjun@example.com",
+      phone: "+91 9876543218",
+      entity: "Full Stack",
+      rating: 4.4,
+      created_at: "2026-05-08",
+      updated_at: "2026-05-08",
+    },
+    {
+      photo: "https://randomuser.me/api/portraits/women/10.jpg",
+      name: "Anjali Roy",
+      display_name: "anjali_dev",
+      email: "anjali@example.com",
+      phone: "+91 9876543219",
+      entity: "Software Engineer",
+      rating: 5.0,
+      created_at: "2026-05-08",
+      updated_at: "2026-05-08",
+    },
+  ];
+
+  const columns = [
+    { label: "S.No", key: "index" },
+    { label: "Photo", key: "photo" },
+    { label: "Name", key: "name" },
+    { label: "Display Name", key: "display_name" },
+    { label: "Email", key: "email" },
+    { label: "Phone", key: "phone" },
+    { label: "Entity", key: "entity" },
+    // { label: "Balance", key: "balance" },
+    { label: "Rating", key: "rating" },
+    { label: "Created At", key: "created_at" },
+    { label: "Updated At", key: "updated_at" },
+  ];
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -64,6 +193,12 @@ function Dashboard({ user, onLogout }) {
     };
     fetchUsers();
   }, []);
+
+  const activityHeaders = ["User", "Action", "Timestamp", "Status"];
+
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedUsers = users.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     
@@ -152,8 +287,8 @@ function Dashboard({ user, onLogout }) {
             </div>
             <p className="stat-note">TOTAL USERS</p>
             <p className="stat-value">24,512</p>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: "75%" }} />
+              <div className="progress-bar">
+              <div className="progress-fill progress-fill--75" />
             </div>
           </div>
           <div className="stat-card">
@@ -194,38 +329,40 @@ function Dashboard({ user, onLogout }) {
                 View All
               </button>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Action</th>
-                  <th>Timestamp</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
+            <div className="table-scroll">
+              <table className="activity-log-table">
+                <thead>
                   <tr>
-                    <td colSpan="4" style={{ textAlign: "center", padding: "20px" }}>
-                      Loading users...
-                    </td>
+                    {columns.map((col) => (
+                      <th
+                        key={col.key}
+                        className={`activity-th ${col.key === "photo" ? "activity-th--photo" : "activity-th--cell"}`}
+                      >
+                        {col.label}
+                      </th>
+                    ))}
                   </tr>
-                ) : (
-                  users.map((user, index) => (
-                    <tr key={user.id}>
-                      <td>{user.name}</td>
-                      <td>{user.company?.name || "No company"}</td>
-                      <td>{new Date(Date.now() - Math.random() * 10000000000).toLocaleTimeString()}</td>
-                      <td>
-                        <span className={`status-badge ${index % 3 === 0 ? "status-failed" : "status-success"}`}>
-                          {index % 3 === 0 ? "FAILED" : "SUCCESS"}
-                        </span>
-                      </td>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index}>
+                      {columns.map((col) => (
+                        <td
+                          key={col.key}
+                          className={`activity-td ${col.key === "photo" ? "activity-td--photo" : "activity-td--cell"}`}
+                        >
+                          {col.key === "index"
+                            ? index + 1
+                            : col.key === "photo"
+                              ? <img src={item[col.key]} alt={item.name} className="activity-avatar" />
+                              : item[col.key]}
+                        </td>
+                      ))}
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
           <div className="analytics-right">
             <section className="analytics-card">
@@ -242,13 +379,13 @@ function Dashboard({ user, onLogout }) {
               <div className="analytics-footer">
                 <div>
                   <p className="analytic-label">Active Sessions</p>
-                  <p className="analytic-number" style={{ color: "#1a237e" }}>
+                  <p className="analytic-number analytic-number--primary">
                     1,284
                   </p>
                 </div>
                 <div>
                   <p className="analytic-label">Conversion</p>
-                  <p className="analytic-number" style={{ color: "#00650d" }}>
+                  <p className="analytic-number analytic-number--success">
                     3.4%
                   </p>
                 </div>
