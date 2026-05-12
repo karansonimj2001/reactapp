@@ -1,14 +1,23 @@
 import Sidebar from "../components/Sidebar";
 
-function AdminLayout({
-  children,
-  onLogout,
-}) {
+function AdminLayout({ children }) {
+
+  function handleLogout() {
+
+    localStorage.removeItem(
+      "adminPortalUser"
+    );
+
+    window.location.href = "/login";
+  }
 
   return (
+
     <div className="admin-shell">
 
-      <Sidebar onLogout={onLogout} />
+      <Sidebar
+        onLogout={handleLogout}
+      />
 
       <main className="admin-main">
         {children}

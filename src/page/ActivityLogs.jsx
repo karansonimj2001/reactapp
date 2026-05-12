@@ -1,10 +1,10 @@
 import AdminLayout from "../Layouts/AdminLayouts";
 
-function ActivityLogs({ onLogout }) {
+function ActivityLogs() {
 
   return (
 
-    <AdminLayout onLogout={onLogout}>
+    <AdminLayout>
 
       <h1>Activity Logs</h1>
 

@@ -162,7 +162,7 @@ function getInitials(name) {
   return (first + second).toUpperCase();
 }
 
-function Dashboard({ user, onLogout }) {
+function Dashboard({ user }) {
   const navigate = useNavigate();
   const location = useLocation();
   const selectedNav = location.pathname;
@@ -233,8 +233,8 @@ function Dashboard({ user, onLogout }) {
   }
 
   return (
-    <AdminLayout onLogout={onLogout}>
-      <main className="admin-main">
+    <AdminLayout>
+      <main className="admin-mai">
         <div className="top-bar">
           <div className="top-search">
             <div className="search-box">
@@ -331,11 +331,11 @@ function Dashboard({ user, onLogout }) {
           <section className="activity-card">
             <div className="card-header">
               <h2>
-                {selectedNav === "dashboard"
+                {selectedNav === "/dashboard"
                   ? "Recent Activity Log"
-                  : selectedNav === "Teammanagement"
+                  : selectedNav === "/team-management"
                     ? "Team Users"
-                    : selectedNav === "activity"
+                    : selectedNav === "/activity-logs"
                       ? "Activity Logs"
                       : "System Table"}
               </h2>

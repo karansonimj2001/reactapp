@@ -1,10 +1,10 @@
 import AdminLayout from "../Layouts/AdminLayouts";
 
-function Analytics({ onLogout }) {
+function Analytics() {
 
   return (
 
-    <AdminLayout onLogout={onLogout}>
+    <AdminLayout>
 
       <h1>Analytics Page</h1>
 
