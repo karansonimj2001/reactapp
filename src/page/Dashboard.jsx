@@ -39,6 +39,13 @@ const navItems = [
     label: "Activity Logs",
   },
 ];
+const adminData = {
+  email: "jhvjdhs@gdsvh.com",
+  password: "hfgeshfaghcbabshvs",
+  role: "SUPER ADMIN",
+  remember: true,
+  savedAt: "2026-05-12T10:52:46.289Z",
+};
 const data = [
   {
     photo: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -261,10 +268,14 @@ function Dashboard({ user }) {
             </button>
 
             <div className="profile-card">
-              <div className="profile-avatar">AR</div>
+              <div className="profile-avatar">
+                {adminData.email.charAt(0).toUpperCase()}
+              </div>
+
               <div>
-                <p className="profile-name">Alex Rivera</p>
-                <p className="profile-role">SUPER ADMIN</p>
+                <p className="profile-name">{adminData.email}</p>
+
+                <p className="profile-role">{adminData.role}</p>
               </div>
             </div>
           </div>
