@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
@@ -13,36 +14,144 @@ import CloudQueueOutlinedIcon from "@mui/icons-material/CloudQueueOutlined";
 import SupportOutlinedIcon from "@mui/icons-material/SupportOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import axios from "axios";
-
+import AdminLayout from "../Layouts/AdminLayouts";
+// import axios from "axios";
+// import { useNavigate, useLocation } from "react-router-dom";
 const navItems = [
   {
-    id: "dashboard",
+    id: "/dashboard",
     label: "Dashboard",
-    icon: <DashboardCustomizeOutlinedIcon />,
   },
   {
-    id: "Teammanagement",
+    id: "/team-management",
     label: "Team Management",
-    icon: <PermIdentityOutlinedIcon />,
   },
   {
-    id: "analytics",
+    id: "/analytics",
     label: "System Analytics",
-    icon: <AnalyticsOutlinedIcon />,
   },
   {
-    id: "settings",
+    id: "/settings",
     label: "Settings",
-    icon: <SettingsOutlinedIcon />,
   },
   {
-    id: "activity",
+    id: "/activity-logs",
     label: "Activity Logs",
-    icon: <ReceiptLongOutlinedIcon />,
   },
 ];
-
+const data = [
+  {
+    photo: "https://randomuser.me/api/portraits/men/1.jpg",
+    name: "Rahul Sharma",
+    display_name: "rahul_dev",
+    email: "rahul@example.com",
+    phone: "+91 9876543210",
+    entity: "Developer",
+    rating: 4.5,
+    created_at: "2026-05-01",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/women/2.jpg",
+    name: "Priya Verma",
+    display_name: "priya_ui",
+    email: "priya@example.com",
+    phone: "+91 9876543211",
+    entity: "Designer",
+    rating: 4.8,
+    created_at: "2026-05-02",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/men/3.jpg",
+    name: "Amit Kumar",
+    display_name: "amit_react",
+    email: "amit@example.com",
+    phone: "+91 9876543212",
+    entity: "Frontend",
+    rating: 4.2,
+    created_at: "2026-05-03",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/women/4.jpg",
+    name: "Sneha Patel",
+    display_name: "sneha_app",
+    email: "sneha@example.com",
+    phone: "+91 9876543213",
+    entity: "Mobile App",
+    rating: 4.9,
+    created_at: "2026-05-04",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/men/5.jpg",
+    name: "Vikas Singh",
+    display_name: "vikas_node",
+    email: "vikas@example.com",
+    phone: "+91 9876543214",
+    entity: "Backend",
+    rating: 4.1,
+    created_at: "2026-05-05",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/women/6.jpg",
+    name: "Neha Gupta",
+    display_name: "neha_admin",
+    email: "neha@example.com",
+    phone: "+91 9876543215",
+    entity: "Admin",
+    rating: 4.7,
+    created_at: "2026-05-06",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/men/7.jpg",
+    name: "Karan Mehta",
+    display_name: "karan_js",
+    email: "karan@example.com",
+    phone: "+91 9876543216",
+    entity: "React JS",
+    rating: 4.3,
+    created_at: "2026-05-07",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/women/8.jpg",
+    name: "Pooja Arora",
+    display_name: "pooja_native",
+    email: "pooja@example.com",
+    phone: "+91 9876543217",
+    entity: "React Native",
+    rating: 4.6,
+    created_at: "2026-05-08",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/men/9.jpg",
+    name: "Arjun Das",
+    display_name: "arjun_fullstack",
+    email: "arjun@example.com",
+    phone: "+91 9876543218",
+    entity: "Full Stack",
+    rating: 4.4,
+    created_at: "2026-05-08",
+    updated_at: "2026-05-08",
+  },
+  {
+    photo: "https://randomuser.me/api/portraits/women/10.jpg",
+    name: "Anjali Roy",
+    display_name: "anjali_dev",
+    email: "anjali@example.com",
+    phone: "+91 9876543219",
+    entity: "Software Engineer",
+    rating: 5.0,
+    created_at: "2026-05-08",
+    updated_at: "2026-05-08",
+  },
+];
+// const [itemsPerPage, setItemsPerPage] = useState(10);
 function getInitials(name) {
   const parts = String(name || "")
     .trim()
@@ -54,56 +163,60 @@ function getInitials(name) {
 }
 
 function Dashboard({ user, onLogout }) {
-  const [selectedNav, setSelectedNav] = useState("dashboard");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const selectedNav = location.pathname;
+  const [users] = useState(data);
 
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("https://jsonplaceholder.typicode.com/users");
-        setUsers(response.data);
-      } catch (error) {
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://jsonplaceholder.typicode.com/users",
+  //       );
+  //       setUsers(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error);
+  //       setUsers([]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-        console.error("Error fetching users:", error);
-        setUsers([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+  //   fetchUsers();
+  // }, []);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedNav]);
+  }, [selectedNav, itemsPerPage]);
 
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(users.length / itemsPerPage));
-  }, [users.length]);
+  }, [users.length, itemsPerPage]);
 
   const paginatedUsers = useMemo(() => {
     const safePage = Math.min(Math.max(1, currentPage), totalPages);
     const startIndex = (safePage - 1) * itemsPerPage;
     return users.slice(startIndex, startIndex + itemsPerPage);
-  }, [users, currentPage, totalPages]);
+  }, [users, currentPage, itemsPerPage, totalPages]);
 
   const columns = useMemo(
     () => [
       { label: "S.No", key: "index" },
       { label: "Photo", key: "photo" },
       { label: "Name", key: "name" },
-      { label: "Username", key: "username" },
+      { label: "Display Name", key: "display_name" },
       { label: "Email", key: "email" },
-      { label: "Company", key: "company" },
-      { label: "Website", key: "website" },
+      { label: "Phone", key: "phone" },
+      { label: "Entity", key: "entity" },
+      { label: "Rating", key: "rating" },
     ],
-    []
+    [],
   );
 
   const pageTitle = useMemo(() => {
@@ -120,47 +233,7 @@ function Dashboard({ user, onLogout }) {
   }
 
   return (
-    <div className="admin-shell">
-      <aside className="sidebar">
-        <div className="sidebar-brand">
-          <div>
-            <p className="brand-title">AdminPortal</p>
-            <p className="brand-subtitle">Enterprise v2.1</p>
-          </div>
-
-          <nav className="sidebar-nav" aria-label="Sidebar navigation">
-            {navItems.map((item) => {
-              const isActive = item.id === selectedNav;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`nav-item ${isActive ? "active" : ""}`}
-                  onClick={() => setSelectedNav(item.id)}
-                >
-                  <span className="nav-icon">{item.icon}</span>
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        <div className="sidebar-footer">
-          <button type="button" className="support-ticket">
-            <SupportOutlinedIcon /> Support Ticket
-          </button>
-
-          <p className="sidebar-help">
-            <HelpOutlineOutlinedIcon /> Help Center
-          </p>
-
-          <button type="button" className="logout-button" onClick={onLogout}>
-            <LogoutOutlinedIcon /> Logout
-          </button>
-        </div>
-      </aside>
-
+    <AdminLayout onLogout={onLogout}>
       <main className="admin-main">
         <div className="top-bar">
           <div className="top-search">
@@ -172,10 +245,18 @@ function Dashboard({ user, onLogout }) {
           </div>
 
           <div className="top-actions">
-            <button type="button" className="icon-button" aria-label="Notifications">
+            <button
+              type="button"
+              className="icon-button"
+              aria-label="Notifications"
+            >
               <NotificationsNoneOutlinedIcon />
             </button>
-            <button type="button" className="icon-button" aria-label="Dark mode">
+            <button
+              type="button"
+              className="icon-button"
+              aria-label="Dark mode"
+            >
               <DarkModeOutlinedIcon />
             </button>
 
@@ -192,7 +273,9 @@ function Dashboard({ user, onLogout }) {
         <div className="welcome-row">
           <div>
             <h1>Welcome back, Admin!</h1>
-            <p className="section-copy">Here is what's happening with your system today.</p>
+            <p className="section-copy">
+              Here is what's happening with your system today.
+            </p>
           </div>
         </div>
 
@@ -270,7 +353,9 @@ function Dashboard({ user, onLogout }) {
                       <th
                         key={col.key}
                         className={`activity-th ${
-                          col.key === "photo" ? "activity-th--photo" : "activity-th--cell"
+                          col.key === "photo"
+                            ? "activity-th--photo"
+                            : "activity-th--cell"
                         }`}
                       >
                         {col.label}
@@ -282,36 +367,51 @@ function Dashboard({ user, onLogout }) {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={columns.length} style={{ padding: 18, color: "#7b7894" }}>
+                      <td
+                        colSpan={columns.length}
+                        style={{ padding: 18, color: "#7b7894" }}
+                      >
                         Loading...
                       </td>
                     </tr>
                   ) : paginatedUsers.length === 0 ? (
                     <tr>
-                      <td colSpan={columns.length} style={{ padding: 18, color: "#7b7894" }}>
+                      <td
+                        colSpan={columns.length}
+                        style={{ padding: 18, color: "#7b7894" }}
+                      >
                         No data found.
                       </td>
                     </tr>
                   ) : (
                     paginatedUsers.map((item, idx) => {
-                      const rowIndex = (currentPage - 1) * itemsPerPage + idx + 1;
+                      const rowIndex =
+                        (currentPage - 1) * itemsPerPage + idx + 1;
 
                       return (
                         <tr key={item.id}>
                           {columns.map((col) => {
                             const tdClass =
-                              col.key === "photo" ? "activity-td--photo" : "activity-td--cell";
+                              col.key === "photo"
+                                ? "activity-td--photo"
+                                : "activity-td--cell";
 
                             let value = item[col.key];
-                            if (col.key === "company") value = item.company?.name || "-";
-                            if (col.key === "photo") value = getInitials(item.name);
+                            if (col.key === "photo") value = item.photo;
 
                             return (
-                              <td key={col.key} className={`activity-td ${tdClass}`}>
+                              <td
+                                key={col.key}
+                                className={`activity-td ${tdClass}`}
+                              >
                                 {col.key === "index" ? (
                                   rowIndex
                                 ) : col.key === "photo" ? (
-                                  <div className="activity-avatar">{value}</div>
+                                  <img
+                                    src={value}
+                                    alt={item.name}
+                                    className="activity-avatar"
+                                  />
                                 ) : (
                                   value
                                 )}
@@ -326,28 +426,61 @@ function Dashboard({ user, onLogout }) {
               </table>
             </div>
 
-            <div className="pagination-bar" role="navigation" aria-label="Pagination">
-              <button
-                type="button"
-                className="pagination-btn"
-                onClick={goPrev}
-                disabled={currentPage === 1}
-              >
-                Prev
-              </button>
+            <div className="pagination-bar">
+              {/* Left Side - Rows per page */}
+              <div className="pagination-left">
+                <span style={{ fontSize: "14px", color: "#6b7280" }}>
+                  Rows per page:
+                </span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="rows-per-page-select"
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
 
-              <span className="pagination-info">
-                Page <b>{Math.min(currentPage, totalPages)}</b> of <b>{totalPages}</b>
-              </span>
+              {/* Center - Prev, Page, Next */}
+              <div className="pagination-center">
+                <button
+                  type="button"
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
 
-              <button
-                type="button"
-                className="pagination-btn"
-                onClick={goNext}
-                disabled={currentPage === totalPages}
+                <span className="pagination-info">
+                  Page <b>{currentPage}</b> of <b>{totalPages}</b>
+                </span>
+
+                <button
+                  type="button"
+                  className="pagination-btn"
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+
+              {/* Right Side - Showing X to Y of Z */}
+              <div
+                className="pagination-right"
+                style={{ fontSize: "14px", color: "#6b7280" }}
               >
-                Next
-              </button>
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, users.length)} of{" "}
+                {users.length}
+              </div>
             </div>
           </section>
 
@@ -368,11 +501,15 @@ function Dashboard({ user, onLogout }) {
               <div className="analytics-footer">
                 <div>
                   <p className="analytic-label">Active Sessions</p>
-                  <p className="analytic-number analytic-number--primary">1,284</p>
+                  <p className="analytic-number analytic-number--primary">
+                    1,284
+                  </p>
                 </div>
                 <div>
                   <p className="analytic-label">Conversion</p>
-                  <p className="analytic-number analytic-number--success">3.4%</p>
+                  <p className="analytic-number analytic-number--success">
+                    3.4%
+                  </p>
                 </div>
               </div>
             </section>
@@ -380,7 +517,10 @@ function Dashboard({ user, onLogout }) {
             <section className="upgrade-card">
               <div>
                 <h2>Upgrade Insight</h2>
-                <p>Systems are running optimally, but storage scaling is recommended by next quarter.</p>
+                <p>
+                  Systems are running optimally, but storage scaling is
+                  recommended by next quarter.
+                </p>
               </div>
               <button type="button" className="upgrade-button">
                 Review Infrastructure
@@ -389,7 +529,7 @@ function Dashboard({ user, onLogout }) {
           </div>
         </div>
       </main>
-    </div>
+    </AdminLayout>
   );
 }
 
